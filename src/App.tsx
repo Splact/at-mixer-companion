@@ -68,7 +68,10 @@ function AppContent() {
     <div className="App">
       <AppHeader
         onResetPAT={handleResetPAT}
-        onProjectSelect={() => setSelectedProjectId(null)}
+        onProjectSelect={() => {
+          // HACK: refresh the page because we cannot dismiss current document sync
+          window.location.reload();
+        }}
       />
 
       {!selectedProjectId ? (

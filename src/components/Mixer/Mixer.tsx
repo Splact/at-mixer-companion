@@ -115,11 +115,12 @@ export const Mixer: React.FC<MixerProps> = ({
 
       {nexusDocument && (
         <div className="mixer-channels">
-          {mixerChannels.map((channel) => (
+          {mixerChannels.map((channel, index) => (
             <Channel
               key={channel.id}
               nexusDocument={nexusDocument}
               entity={channel}
+              index={index}
             />
           ))}
 

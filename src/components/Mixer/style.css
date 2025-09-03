@@ -47,6 +47,8 @@
 }
 
 .loading-message {
+  align-self: center;
+
   text-align: center;
   color: var(--text-secondary);
   font-size: 1.1rem;
@@ -58,7 +60,7 @@
 }
 
 .mixer-channels {
-  flex: 1 0 300px;
+  flex: 1 0 480px;
 
   display: flex;
   justify-content: flex-start;

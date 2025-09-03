@@ -1,0 +1,18 @@
+.control-button {
+  min-width: 40px !important;
+  height: 32px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+.mute-button {
+  border-color: #a03030 !important;
+  color: var(--text-primary) !important;
+}
+
+.mute-button.active {
+  background-color: #a03030 !important;
+  color: white !important;
+}
