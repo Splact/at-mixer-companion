@@ -7,9 +7,13 @@ import { NexusEntity, SyncedDocument } from "audiotool-nexus/document";
 
 interface MixerProps {
   projectId: string;
+  projectDisplayName: string | null;
 }
 
-export const Mixer: React.FC<MixerProps> = ({ projectId }) => {
+export const Mixer: React.FC<MixerProps> = ({
+  projectId,
+  projectDisplayName,
+}) => {
   const { audiotool } = useAudiotool();
   const [mixerChannels, setMixerChannels] = useState<
     NexusEntity<"mixerChannel">[]
@@ -46,7 +50,11 @@ export const Mixer: React.FC<MixerProps> = ({ projectId }) => {
               return prevChannels;
             }
 
-            return [...prevChannels, mixerChannel];
+            return [...prevChannels, mixerChannel].sort(
+              (a, b) =>
+                a.fields.displayParameters.fields.index.value -
+                b.fields.displayParameters.fields.index.value
+            );
           });
 
           nexusDocument.events.onRemove(mixerChannel, () => {
@@ -92,11 +100,7 @@ export const Mixer: React.FC<MixerProps> = ({ projectId }) => {
     return (
       <div className="mixer">
         <div className="mixer-header">
-          <h1>AT Mixer Companion</h1>
-          <div className="project-info">
-            <span className="project-label">Project:</span>
-            <span className="project-id">{projectId}</span>
-          </div>
+          <h1>{projectDisplayName || "Loading..."}</h1>
         </div>
         <div className="loading-message">Setting up mixer...</div>
       </div>
@@ -106,11 +110,7 @@ export const Mixer: React.FC<MixerProps> = ({ projectId }) => {
   return (
     <div className="mixer">
       <div className="mixer-header">
-        <h1>AT Mixer Companion</h1>
-        <div className="project-info">
-          <span className="project-label">Project:</span>
-          <span className="project-id">{projectId}</span>
-        </div>
+        <h1>{projectDisplayName || "Loading..."}</h1>
       </div>
 
       {nexusDocument && (

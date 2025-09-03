@@ -13,7 +13,7 @@ interface Project {
 }
 
 interface ProjectSelectorProps {
-  onProjectSelect: (projectId: string) => void;
+  onProjectSelect: (projectId: string, displayName: string) => void;
 }
 
 export function ProjectSelector({ onProjectSelect }: ProjectSelectorProps) {
@@ -55,8 +55,8 @@ export function ProjectSelector({ onProjectSelect }: ProjectSelectorProps) {
     loadProjects();
   }, [audiotool]);
 
-  const handleProjectClick = (projectId: string) => {
-    onProjectSelect(projectId);
+  const handleProjectClick = (projectId: string, displayName: string) => {
+    onProjectSelect(projectId, displayName);
   };
 
   if (isLoading) {
@@ -119,7 +119,9 @@ export function ProjectSelector({ onProjectSelect }: ProjectSelectorProps) {
             <div
               key={project.name}
               className="project-card"
-              onClick={() => handleProjectClick(project.name)}
+              onClick={() =>
+                handleProjectClick(project.name, project.displayName)
+              }
             >
               <div className="project-cover">
                 <img

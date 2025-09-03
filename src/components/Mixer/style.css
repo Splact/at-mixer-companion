@@ -1,13 +1,15 @@
 .mixer {
-  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 160px);
   background: var(--bg-primary);
-  padding: 20px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .mixer-header {
+  flex: 0 1 auto;
   text-align: center;
-  margin-bottom: 40px;
+  padding: 2rem 0;
 }
 
 .mixer-header h1 {
@@ -56,21 +58,42 @@
 }
 
 .mixer-channels {
+  flex: 1 0 300px;
+
   display: flex;
-  justify-content: center;
-  align-items: flex-end;
+  justify-content: flex-start;
   gap: 24px;
-  flex-wrap: wrap;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-primary) transparent;
+  padding: 2rem;
+  height: 100%;
+}
+
+/* custom scrollbar styling for webkit browsers */
+.mixer-channels::-webkit-scrollbar {
+  height: 8px;
+}
+
+.mixer-channels::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mixer-channels::-webkit-scrollbar-thumb {
+  background: var(--border-primary);
+  border-radius: 4px;
+}
+
+.mixer-channels::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-secondary);
 }
 
 /* responsive design for smaller screens */
 @media (max-width: 768px) {
   .mixer-channels {
     gap: 16px;
-    padding: 16px;
   }
 
   .mixer-header h1 {
@@ -81,7 +104,6 @@
 @media (max-width: 480px) {
   .mixer-channels {
     gap: 12px;
-    padding: 12px;
   }
 
   .mixer-header h1 {

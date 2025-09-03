@@ -13,6 +13,9 @@ function AppContent() {
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
     null
   );
+  const [selectedProjectDisplayName, setSelectedProjectDisplayName] = useState<
+    string | null
+  >(null);
   const [isSettingPAT, setIsSettingPAT] = useState<boolean>(false);
   const [patError, setPatError] = useState<string>("");
 
@@ -35,13 +38,15 @@ function AppContent() {
     }
   };
 
-  const handleProjectSelect = (projectId: string) => {
+  const handleProjectSelect = (projectId: string, displayName: string) => {
     setSelectedProjectId(projectId);
+    setSelectedProjectDisplayName(displayName);
   };
 
   const handleResetPAT = () => {
     clearPAT();
     setSelectedProjectId(null);
+    setSelectedProjectDisplayName(null);
   };
 
   // show loading state while initializing client
@@ -69,7 +74,10 @@ function AppContent() {
       {!selectedProjectId ? (
         <ProjectSelector onProjectSelect={handleProjectSelect} />
       ) : (
-        <Mixer projectId={selectedProjectId} />
+        <Mixer
+          projectId={selectedProjectId}
+          projectDisplayName={selectedProjectDisplayName}
+        />
       )}
     </div>
   );
