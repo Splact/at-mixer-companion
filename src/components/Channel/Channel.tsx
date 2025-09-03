@@ -145,7 +145,7 @@ export const Channel: React.FC<ChannelProps> = ({
   return (
     <div className="channel">
       <div className="channel-index">{index + 1}</div>
-      <div className="channel-name">{name}</div>
+      <div className="channel-name">{name || "Channel"}</div>
       <div
         className="channel-color"
         style={{ backgroundColor: colorSet.background }}
