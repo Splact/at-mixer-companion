@@ -1,0 +1,99 @@
+.main-output {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #282828;
+  border-radius: 12px;
+  padding: 20px;
+  min-width: 140px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  border: 2px solid #f5c542;
+  position: relative;
+}
+
+.main-output::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #f5c542, #f2b93b, #f5c542);
+  border-radius: 12px;
+  z-index: -1;
+  opacity: 0.3;
+}
+
+.main-output-label {
+  color: #f5c542;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px rgba(245, 197, 66, 0.3);
+}
+
+.main-output-color {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #f5c542, #f2b93b);
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 20px rgba(245, 197, 66, 0.4);
+}
+
+.volume-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.volume-slider.main-volume {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 140px;
+  background: #444444;
+  outline: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transform: rotate(270deg);
+  transform-origin: center;
+}
+
+.volume-slider.main-volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #f5c542, #f2b93b);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(245, 197, 66, 0.4);
+}
+
+.volume-slider.main-volume::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #f5c542, #f2b93b);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 8px rgba(245, 197, 66, 0.4);
+}
+
+.volume-value {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  background: #444444;
+  padding: 6px 10px;
+  border-radius: 6px;
+  min-width: 35px;
+  text-align: center;
+  border: 1px solid #f5c542;
+}

@@ -1,0 +1,30 @@
+/* Header Styles */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: #282828;
+  border-bottom: 1px solid #444444;
+}
+
+.header h1 {
+  color: #ffffff;
+  font-size: 1.8rem;
+}
+
+.reset-button {
+  padding: 0.5rem 1rem;
+  background: #333333;
+  color: #ffffff;
+  border: 1px solid #444444;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.reset-button:hover {
+  background: #f5c542;
+  color: #1e1e1e;
+  border-color: #f5c542;
+}
