@@ -7,20 +7,20 @@
   min-height: 100vh;
   padding: 2rem;
   text-align: center;
-  color: #ffffff;
-  background-color: #1e1e1e;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
 }
 
 .pat-form-container h1 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .pat-form-container p {
   font-size: 1.1rem;
   margin-bottom: 2rem;
-  color: #e0e0e0;
+  color: var(--text-secondary);
 }
 
 .error-message {

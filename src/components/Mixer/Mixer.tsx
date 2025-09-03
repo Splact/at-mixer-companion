@@ -1,59 +1,133 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useAudiotool } from "../../contexts/AudiotoolContext";
 import { Channel } from "../Channel";
 import { MainOutput } from "../MainOutput";
 import "./style.css";
+import { NexusEntity, SyncedDocument } from "audiotool-nexus/document";
 
-interface ChannelData {
-  id: number;
-  name: string;
-  color: string;
-  volume: number;
+interface MixerProps {
+  projectId: string;
 }
 
-export const Mixer: React.FC = () => {
-  const [channels, setChannels] = useState<ChannelData[]>([
-    { id: 1, name: "Kick", color: "#ff4757", volume: 75 },
-    { id: 2, name: "Snare", color: "#2ed573", volume: 80 },
-    { id: 3, name: "Hi-Hat", color: "#3742fa", volume: 60 },
-    { id: 4, name: "Bass", color: "#ffa502", volume: 85 },
-  ]);
+export const Mixer: React.FC<MixerProps> = ({ projectId }) => {
+  const { audiotool } = useAudiotool();
+  const [mixerChannels, setMixerChannels] = useState<
+    NexusEntity<"mixerChannel">[]
+  >([]);
+  const [mixerOut, setMixerOut] = useState<NexusEntity<"mixerOut">>();
+  const [nexusDocument, setNexusDocument] = useState<SyncedDocument>();
+  const [isLoading, setIsLoading] = useState(true);
+  const isNexusDocumentSetup = useRef<boolean>(false);
 
-  const [mainVolume, setMainVolume] = useState(70);
+  useEffect(() => {
+    const setupNexusDocument = async () => {
+      if (!audiotool || !projectId || isNexusDocumentSetup.current) {
+        return;
+      }
 
-  const handleChannelVolumeChange = (channelId: number, newVolume: number) => {
-    setChannels((prevChannels) =>
-      prevChannels.map((channel) =>
-        channel.id === channelId ? { ...channel, volume: newVolume } : channel
-      )
+      console.log("Setting up Nexus document...");
+
+      try {
+        setIsLoading(true);
+        isNexusDocumentSetup.current = true;
+
+        // create the synced document
+        const nexusDocument = await audiotool.createSyncedDocument({
+          mode: "online",
+          project: projectId,
+        });
+
+        // add listener for mixerChannel creation
+        nexusDocument.events.onCreate("mixerChannel", (mixerChannel) => {
+          console.log("mixerChannel created:", mixerChannel.id);
+          setMixerChannels((prevChannels) => {
+            // check if channel already exists
+            if (prevChannels.find((ch) => ch.id === mixerChannel.id)) {
+              return prevChannels;
+            }
+
+            return [...prevChannels, mixerChannel];
+          });
+
+          nexusDocument.events.onRemove(mixerChannel, () => {
+            console.log("mixerChannel removed:", mixerChannel.id);
+
+            setMixerChannels((prevChannels) =>
+              prevChannels.filter((ch) => ch.id !== mixerChannel.id)
+            );
+          });
+        });
+
+        nexusDocument.events.onCreate("mixerOut", (mixerOut) => {
+          console.log("mixerOut created:", mixerOut.id);
+
+          setMixerOut(mixerOut);
+
+          nexusDocument.events.onRemove(mixerOut, () => {
+            console.log("mixerOut removed:", mixerOut.id);
+
+            setMixerOut(undefined);
+          });
+        });
+
+        console.log("Starting Nexus document sync...");
+
+        // start the synced document
+        await nexusDocument.start();
+
+        console.log("Nexus document sync started.");
+
+        setNexusDocument(nexusDocument);
+      } catch (error) {
+        console.error("Error setting up nexus document:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    setupNexusDocument();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="mixer">
+        <div className="mixer-header">
+          <h1>AT Mixer Companion</h1>
+          <div className="project-info">
+            <span className="project-label">Project:</span>
+            <span className="project-id">{projectId}</span>
+          </div>
+        </div>
+        <div className="loading-message">Setting up mixer...</div>
+      </div>
     );
-  };
-
-  const handleMainVolumeChange = (newVolume: number) => {
-    setMainVolume(newVolume);
-  };
+  }
 
   return (
     <div className="mixer">
       <div className="mixer-header">
         <h1>AT Mixer Companion</h1>
+        <div className="project-info">
+          <span className="project-label">Project:</span>
+          <span className="project-id">{projectId}</span>
+        </div>
       </div>
-      <div className="mixer-channels">
-        {channels.map((channel) => (
-          <Channel
-            key={channel.id}
-            name={channel.name}
-            color={channel.color}
-            volume={channel.volume}
-            onVolumeChange={(volume) =>
-              handleChannelVolumeChange(channel.id, volume)
-            }
-          />
-        ))}
-        <MainOutput
-          volume={mainVolume}
-          onVolumeChange={handleMainVolumeChange}
-        />
-      </div>
+
+      {nexusDocument && (
+        <div className="mixer-channels">
+          {mixerChannels.map((channel) => (
+            <Channel
+              key={channel.id}
+              nexusDocument={nexusDocument}
+              entity={channel}
+            />
+          ))}
+
+          {mixerOut && (
+            <MainOutput nexusDocument={nexusDocument} entity={mixerOut} />
+          )}
+        </div>
+      )}
     </div>
   );
 };

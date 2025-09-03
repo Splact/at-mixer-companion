@@ -1,82 +1,85 @@
-import React, { useState, useEffect } from "react";
-import { createAudiotoolClient } from "audiotool-nexus";
+import React, { useState } from "react";
+import { AudiotoolProvider, useAudiotool } from "./contexts/AudiotoolContext";
 import { Mixer } from "./components/Mixer";
 import { PATForm } from "./components/PATForm";
+import { ProjectSelector } from "./components/ProjectSelector";
 import { LoadingScreen } from "./components/LoadingScreen";
 import { AppHeader } from "./components/AppHeader";
 import "./App.css";
 
-function App() {
-  const [isPATSet, setIsPATSet] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
-  const [audiotool, setAudiotool] = useState<any>(null);
-
-  useEffect(() => {
-    const initializeClient = async () => {
-      try {
-        const client = await createAudiotoolClient();
-        setAudiotool(client);
-
-        // check if client already has a PAT
-        if (client.hasPAT()) {
-          setIsPATSet(true);
-        }
-      } catch (err) {
-        console.error("Error creating Audiotool client:", err);
-        setError(
-          "Failed to create Audiotool client. Please refresh the page and try again."
-        );
-      }
-    };
-
-    initializeClient();
-  }, []);
+function AppContent() {
+  const { audiotool, isLoading, error, isPATSet, setPAT, clearPAT } =
+    useAudiotool();
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
+    null
+  );
+  const [isSettingPAT, setIsSettingPAT] = useState<boolean>(false);
+  const [patError, setPatError] = useState<string>("");
 
   const handlePATSubmit = async (pat: string) => {
     if (!audiotool) {
-      setError("Audiotool client not initialized. Please refresh the page.");
+      setPatError("Audiotool client not initialized. Please refresh the page.");
       return;
     }
 
-    setIsLoading(true);
-    setError("");
+    setIsSettingPAT(true);
+    setPatError("");
 
     try {
-      audiotool.setPAT(pat);
-      setIsPATSet(true);
+      await setPAT(pat);
     } catch (err) {
-      setError("Failed to set PAT. Please check your token and try again.");
+      setPatError("Failed to set PAT. Please check your token and try again.");
       console.error("Error setting PAT:", err);
     } finally {
-      setIsLoading(false);
+      setIsSettingPAT(false);
     }
+  };
+
+  const handleProjectSelect = (projectId: string) => {
+    setSelectedProjectId(projectId);
   };
 
   const handleResetPAT = () => {
-    if (audiotool) {
-      audiotool.setPAT(""); // clear the PAT
-    }
-    setIsPATSet(false);
-    setError("");
+    clearPAT();
+    setSelectedProjectId(null);
   };
 
   // show loading state while initializing client
-  if (!audiotool) {
-    return <LoadingScreen error={error} />;
+  if (isLoading) {
+    return <LoadingScreen error={error || ""} />;
   }
 
   if (!isPATSet) {
     return (
-      <PATForm onSubmit={handlePATSubmit} isLoading={isLoading} error={error} />
+      <PATForm
+        onSubmit={handlePATSubmit}
+        isLoading={isSettingPAT}
+        error={patError}
+      />
     );
   }
 
   return (
     <div className="App">
-      <AppHeader onResetPAT={handleResetPAT} />
-      <Mixer />
+      <AppHeader
+        onResetPAT={handleResetPAT}
+        onProjectSelect={() => setSelectedProjectId(null)}
+      />
+
+      {!selectedProjectId ? (
+        <ProjectSelector onProjectSelect={handleProjectSelect} />
+      ) : (
+        <Mixer projectId={selectedProjectId} />
+      )}
     </div>
+  );
+}
+
+function App() {
+  return (
+    <AudiotoolProvider>
+      <AppContent />
+    </AudiotoolProvider>
   );
 }
 

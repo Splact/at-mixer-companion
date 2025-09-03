@@ -56,15 +56,24 @@ export function PATForm({ onSubmit, isLoading, error }: PATFormProps) {
           <li>
             Go to{" "}
             <a
-              href="https://www.audiotool.com"
+              href="https://beta.audiotool.com"
               target="_blank"
               rel="noopener noreferrer"
             >
-              audiotool.com
+              beta.audiotool.com
             </a>
           </li>
           <li>Log in to your account</li>
-          <li>Navigate to your profile settings</li>
+          <li>
+            Go to{" "}
+            <a
+              href="https://rpc.audiotool.com/dev"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              rpc.audiotool.com/dev
+            </a>
+          </li>
           <li>Generate a new Personal Access Token</li>
         </ol>
       </div>

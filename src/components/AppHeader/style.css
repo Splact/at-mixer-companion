@@ -3,28 +3,95 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 2rem;
   padding: 1rem 2rem;
-  background: #282828;
-  border-bottom: 1px solid #444444;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.header-left {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  white-space: nowrap;
 }
 
 .header h1 {
-  color: #ffffff;
+  color: var(--text-primary);
   font-size: 1.8rem;
+  margin: 0;
 }
 
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border-primary);
+}
+
+.user-name {
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+/* mobile portrait responsive adjustments */
+@media (max-width: 768px) and (orientation: portrait) {
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+
+  .header h1 {
+    font-size: 1.5rem;
+  }
+
+  .user-name {
+    font-size: 0.8rem;
+  }
+
+  .header-buttons {
+    flex-direction: column;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  .project-select-button,
+  .reset-button {
+    width: 100%;
+    padding: 0.75rem 1rem;
+  }
+}
+
+.project-select-button,
 .reset-button {
   padding: 0.5rem 1rem;
-  background: #333333;
-  color: #ffffff;
-  border: 1px solid #444444;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
+.project-select-button:hover,
 .reset-button:hover {
-  background: #f5c542;
-  color: #1e1e1e;
-  border-color: #f5c542;
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+  border-color: var(--accent-primary);
 }

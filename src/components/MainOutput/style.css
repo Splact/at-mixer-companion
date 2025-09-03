@@ -2,12 +2,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #282828;
+  background: var(--bg-secondary);
   border-radius: 12px;
   padding: 20px;
   min-width: 140px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
-  border: 2px solid #f5c542;
+  box-shadow: 0 4px 16px var(--shadow-color);
+  border: 2px solid var(--accent-primary);
   position: relative;
 }
 
@@ -18,14 +18,19 @@
   left: -2px;
   right: -2px;
   bottom: -2px;
-  background: linear-gradient(45deg, #f5c542, #f2b93b, #f5c542);
+  background: linear-gradient(
+    45deg,
+    var(--accent-primary),
+    var(--accent-primary-hover),
+    var(--accent-primary)
+  );
   border-radius: 12px;
   z-index: -1;
   opacity: 0.3;
 }
 
 .main-output-label {
-  color: #f5c542;
+  color: var(--accent-primary);
   font-size: 16px;
   font-weight: 700;
   margin-bottom: 16px;
@@ -40,8 +45,12 @@
   height: 50px;
   border-radius: 50%;
   margin-bottom: 20px;
-  background: linear-gradient(135deg, #f5c542, #f2b93b);
-  border: 3px solid #ffffff;
+  background: linear-gradient(
+    135deg,
+    var(--accent-primary),
+    var(--accent-primary-hover)
+  );
+  border: 3px solid var(--text-primary);
   box-shadow: 0 0 20px rgba(245, 197, 66, 0.4);
 }
 
@@ -57,7 +66,7 @@
   appearance: none;
   width: 10px;
   height: 140px;
-  background: #444444;
+  background: var(--border-primary);
   outline: none;
   border-radius: 5px;
   cursor: pointer;
@@ -70,7 +79,11 @@
   appearance: none;
   width: 24px;
   height: 24px;
-  background: linear-gradient(135deg, #f5c542, #f2b93b);
+  background: linear-gradient(
+    135deg,
+    var(--accent-primary),
+    var(--accent-primary-hover)
+  );
   border-radius: 50%;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(245, 197, 66, 0.4);
@@ -79,7 +92,11 @@
 .volume-slider.main-volume::-moz-range-thumb {
   width: 24px;
   height: 24px;
-  background: linear-gradient(135deg, #f5c542, #f2b93b);
+  background: linear-gradient(
+    135deg,
+    var(--accent-primary),
+    var(--accent-primary-hover)
+  );
   border-radius: 50%;
   cursor: pointer;
   border: none;
@@ -87,13 +104,13 @@
 }
 
 .volume-value {
-  color: #ffffff;
+  color: var(--text-primary);
   font-size: 14px;
   font-weight: 600;
-  background: #444444;
+  background: var(--border-primary);
   padding: 6px 10px;
   border-radius: 6px;
   min-width: 35px;
   text-align: center;
-  border: 1px solid #f5c542;
+  border: 1px solid var(--accent-primary);
 }

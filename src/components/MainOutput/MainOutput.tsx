@@ -1,24 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./style.css";
+import { NexusEntity, SyncedDocument } from "audiotool-nexus/document";
 
 interface MainOutputProps {
-  volume: number;
-  onVolumeChange: (volume: number) => void;
+  nexusDocument: SyncedDocument;
+  entity: NexusEntity<"mixerOut">;
 }
 
 export const MainOutput: React.FC<MainOutputProps> = ({
-  volume,
-  onVolumeChange,
+  nexusDocument,
+  entity,
 }) => {
+  const [volume, setVolume] = useState(entity.fields.postGain.value);
+
+  useEffect(() => {
+    const volumeSubscription = nexusDocument.events.onUpdate(
+      entity.fields.postGain,
+      (updatedVolume) => {
+        setVolume(updatedVolume);
+      }
+    );
+
+    return () => {
+      volumeSubscription.terminate();
+    };
+  }, [entity]);
+
   const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newVolume = parseFloat(event.target.value);
-    onVolumeChange(newVolume);
+    // TODO: implement
   };
 
   return (
     <div className="main-output">
       <div className="main-output-label">MAIN OUT</div>
-      <div className="main-output-color"></div>
       <div className="volume-control">
         <input
           type="range"
